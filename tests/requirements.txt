@@ -6,3 +6,5 @@ pytest-html==1.16.1
 pytest-mock==1.7.1
 pytest-sugar==0.9.1
 pytest-xdist==1.22.2
+axel>=0.0.7
+git+git://github.com/geoff-coppertop/python-hw-low-level.git@master#egg=hw-low-level

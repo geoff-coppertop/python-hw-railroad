@@ -40,12 +40,11 @@ setup(
     setup_requires=[
         'setuptools_scm'
     ],
-    # install_requires=[
-    #     'hw_low_level',
-    # ],
-    # dependency_links=[
-    #     'git+https://github.com/geoff-coppertop/python-hw-low-level#egg=hw_low_level',
-    # ],
+    install_requires=[
+        'hw-low-level',
+        'transitions',
+        'axel',
+    ],
     project_urls={
         'Bug Reports': 'https://github.com/geoff-coppertop/python-hw-railroad/issues',
         'Source': 'https://github.com/geoff-coppertop/python-hw-railroad',

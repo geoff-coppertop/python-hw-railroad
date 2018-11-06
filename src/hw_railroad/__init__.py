@@ -7,4 +7,4 @@
 # G. Thomas
 # 2018
 #-------------------------------------------------------------------------------
-from .turnout_efrog_servo import TurnoutEFrogServo
+from .turnout import Turnout
