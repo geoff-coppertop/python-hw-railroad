@@ -100,3 +100,6 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# File system cruft
+.DS_Store
