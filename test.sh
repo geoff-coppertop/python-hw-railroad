@@ -21,10 +21,10 @@ mkdir reports
 mkdir reports/coverage
 
 # Build the docker image
-docker build -t test-image:hw-railroad .
+docker build -q -t test-image:hw-railroad .
 
 # Run `tox` on the image. Automatically remove the container when it exits
 docker run -v "$(pwd)"/reports:/reports --rm -t test-image:hw-railroad tox
 
 # Clean dangling images that result from code changes
-docker images -f dangling=true -q | xargs docker rmi
+docker images prune -q

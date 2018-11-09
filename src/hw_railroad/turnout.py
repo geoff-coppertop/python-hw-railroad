@@ -18,7 +18,13 @@ class Turnout(Machine):
     '''
     ROUTE_CHANGE_SPEED = 20.0       # degrees/second
 
-    def __init__(self, servo, gpo_provider, main_angle, diverging_angle):
+    def __init__(
+        self,
+        servo,
+        gpo_provider,
+        main_angle,
+        diverging_angle,
+        speed):
         '''
         Create a turnout
 
@@ -33,6 +39,8 @@ class Turnout(Machine):
         self.__gpo = gpo_provider
         self.__servo = servo
         self.__motion_time = 0
+
+        self.__speed = speed
 
         self.__min_angle = min(main_angle, diverging_angle)
         self.__max_angle = max(main_angle, diverging_angle)
@@ -52,7 +60,7 @@ class Turnout(Machine):
         if self.__is_idle():
             self.__logger.debug('No motion in progress')
 
-            return
+            return False
         else:
             current_angle = self.__servo.get_angle()
             end_angle = self.__end_angles[self.state]
@@ -77,10 +85,10 @@ class Turnout(Machine):
 
             else:
                 # Calculate the required motion
-                speed = Turnout.ROUTE_CHANGE_SPEED
+                speed = self.__speed
 
                 if current_angle > end_angle:
-                    speed = -Turnout.ROUTE_CHANGE_SPEED
+                    speed *= -1
 
                 time_delta = time - self.__motion_time
 
@@ -98,6 +106,8 @@ class Turnout(Machine):
                 self.__servo.set_angle(new_angle)
 
                 self.__motion_time += time_delta
+
+            return True
 
     def change_route(self, time):
         '''

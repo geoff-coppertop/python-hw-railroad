@@ -20,6 +20,7 @@ from .fake_gpo_provider import FakeGPOProvider
 #-------------------------------------------------------------------------------
 ANGLE_MAIN = 45
 ANGLE_DIV = 135
+ANGULAR_SPEED = 5
 
 #-------------------------------------------------------------------------------
 # Test fixtures
@@ -39,17 +40,17 @@ def turnout_main(servo, gpo_provider):
     """Create a turnout set to the main route"""
     gpo_provider.disable()
 
-    turnout = Turnout(servo, gpo_provider, ANGLE_MAIN, ANGLE_DIV)
+    turnout = Turnout(servo, gpo_provider, ANGLE_MAIN, ANGLE_DIV, ANGULAR_SPEED)
 
     time = 0
 
-    while(turnout.state != 'main'):
+    while turnout.operate(time):
         time += 0.1
-        turnout.operate(time)
 
-    # Check that the route was set to the diverging route
-    assert(servo.get_angle() == ANGLE_MAIN)
-    assert(not gpo_provider.is_enabled())
+    # Check that the route was set to the main route
+    assert turnout.state == 'main'
+    assert servo.get_angle() == ANGLE_MAIN
+    assert not gpo_provider.is_enabled()
 
     return turnout
 
@@ -62,10 +63,10 @@ def test_main_to_diverging_route(turnout_main, servo, gpo_provider):
     turnout_main.change_route(time) # sneaky way to set time to 0 for distance
                                     # calculation
 
-    while(turnout_main.state != 'diverging'):
+    while turnout_main.operate(time):
         time += 0.1
-        turnout_main.operate(time)
 
     # Check that the route was set to the diverging route
-    assert(servo.get_angle() == ANGLE_DIV)
-    assert(gpo_provider.is_enabled())
+    assert turnout_main.state == 'diverging'
+    assert servo.get_angle() == ANGLE_DIV
+    assert gpo_provider.is_enabled()
